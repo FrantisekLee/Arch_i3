@@ -51,7 +51,7 @@ _site="https://gitlab.com/FrantisekLee"
 repo="Arch_i3"
 video="xf86-video-intel"
 video_default="xf86-video-vesa"
-treminal="rxvt-unicode"
+terminal="rxvt-unicode"
 # terminal="xterm"
 
 
