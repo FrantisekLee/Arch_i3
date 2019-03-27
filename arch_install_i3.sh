@@ -62,10 +62,10 @@ set_configs(){
 	sed -i '/^#greeter-hide-user=/s/#//' /etc/lightdm/lightdm.conf
 #	wget "$_site/$repo/arch_desktop.jpg" -O /usr/share/pixmaps/arch_desktop.jpg 2>/dev/null
 #	wget "$_site/$repo/10-evdev.conf" -O /etc/X11/xorg.conf.d/10-evdev.conf 2>/dev/null
-	cp arch_desktop.jpg /usr/share/pixmaps 2>/dev/null
-	cp 10-evdev.conf /etc/X11/xorg.conf.d 2>/dev/null
+	cp arch_desktop.jpg /usr/share/pixmaps/ 2>/dev/null
+	cp 10-evdev.conf /etc/X11/xorg.conf.d/ 2>/dev/null
 	echo -e "[greeter]\nbackground=/usr/share/pixmaps/arch_desktop.jpg" > /etc/lightdm/lightdm-gtk-greeter.conf
-
+	cp i3wm_config /home/${muser}/.config/i3/config 2>/dev/null
 }
 
 set_mirror(){
@@ -86,7 +86,8 @@ set_sudouser(){
 	pacman -S sudo --noconfirm
 	sed -i "s/^root ALL=(ALL) ALL$/root ALL=(ALL) ALL\n${muser} ALL=(ALL) ALL\n/" /etc/sudoers
 #	wget "$_site/dotfiles/.Xresources" -O /home/${muser}/.Xresources 2>/dev/null
-	cp .Xresources /home/${muser}/.Xresources 2>/dev/null
+	git clone https://github.com/FrantisekLee/dotfiles.git
+	cp dotfiles/.Xresources /home/${muser}/.Xresources 2>/dev/null
 	echo "exec i3" > /home/${muser}/.xinitrc && echo "tput bold" >> /home/${muser}/.bashrc
 	echo "xrdb .Xresources" >> /home/${muser}/.bashrc
 	echo "Success: user create and included on group sudo"
