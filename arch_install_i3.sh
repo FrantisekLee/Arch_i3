@@ -53,7 +53,6 @@ video="xf86-video-intel"
 video_default="xf86-video-vesa"
 treminal="rxvt-unicode"
 # terminal="xterm"
-arch_folder="~/Arch_i3"
 
 
 set_configs(){
@@ -63,7 +62,6 @@ set_configs(){
 	sed -i '/^#greeter-hide-user=/s/#//' /etc/lightdm/lightdm.conf
 #	wget "$_site/$repo/arch_desktop.jpg" -O /usr/share/pixmaps/arch_desktop.jpg 2>/dev/null
 #	wget "$_site/$repo/10-evdev.conf" -O /etc/X11/xorg.conf.d/10-evdev.conf 2>/dev/null
-	cd ${arch_folder}
 	cp arch_desktop.jpg /usr/share/pixmaps 2>/dev/null
 	cp 10-evdev.conf /etc/X11/xorg.conf.d 2>/dev/null
 	echo -e "[greeter]\nbackground=/usr/share/pixmaps/arch_desktop.jpg" > /etc/lightdm/lightdm-gtk-greeter.conf
@@ -74,7 +72,6 @@ set_mirror(){
 
     [[ ! "$(which wget)" ]] && echo "Need install wget." && exit 1
 #	wget "$_site/dotfiles/mirror-sk" -O /etc/pacman.d/mirrorlist 2>/dev/null
-	cd ${arch_folder}
 	cp mirror-sk /etc/pacman.d/mirrorlist 2>/dev/null
 }
 
@@ -88,7 +85,6 @@ set_sudouser(){
 	passwd "$muser"
 	pacman -S sudo --noconfirm
 	sed -i "s/^root ALL=(ALL) ALL$/root ALL=(ALL) ALL\n${muser} ALL=(ALL) ALL\n/" /etc/sudoers
-	cd ${arch_folder}
 #	wget "$_site/dotfiles/.Xresources" -O /home/${muser}/.Xresources 2>/dev/null
 	cp .Xresources /home/${muser}/.Xresources 2>/dev/null
 	echo "exec i3" > /home/${muser}/.xinitrc && echo "tput bold" >> /home/${muser}/.bashrc
@@ -99,7 +95,7 @@ set_sudouser(){
 
 set_install(){
 
-    pacman -S vim xorg-server xf86-input-mouse xf86-input-keyboard ${video} xorg-xinit i3-wm i3status i3lock dmenu awesome-terminal-fonts terminus-font ttf-dejavu ${terminal} git lightdm lightdm-gtk-greeter firefox firefox-i18n-en-us bash-completion --noconfirm
+    pacman -S vim xorg-server xf86-input-mouse xf86-input-keyboard ${video_default} xorg-xinit i3-wm i3status i3lock dmenu awesome-terminal-fonts terminus-font ttf-dejavu ${terminal} lightdm lightdm-gtk-greeter firefox firefox-i18n-en-us bash-completion --noconfirm
     set_configs
     
 }
