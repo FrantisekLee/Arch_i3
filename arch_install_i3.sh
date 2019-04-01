@@ -66,7 +66,11 @@ set_configs(){
 	mkdir -p /usr/share/pixmaps && cp arch_desktop.jpg /usr/share/pixmaps/arch_desktop.jpg 2>/dev/null
 	cp 10-evdev.conf /etc/X11/xorg.conf.d/ 2>/dev/null
 	echo -e "[greeter]\nbackground=/usr/share/pixmaps/arch_desktop.jpg" > /etc/lightdm/lightdm-gtk-greeter.conf
-	cp i3wm_config /home/admin/.config/i3/config 2>/dev/null
+	
+	[[ -z "$2" ]] && echo "Set name user." && exit 1
+   	muser=$(echo "$2" | tr -d ' _-' | tr 'A-Z' 'a-z')
+    
+	cp i3wm_config /home/${muser}/.config/i3/config 2>/dev/null
 }
 
 set_mirror(){
