@@ -34,6 +34,7 @@ usage: ${0##*/} [flags] [options]
     --mirror, -m                         Update mirror (Only for Slovakia)
     --sudouser, -su  <user> <password>   Create name to user with privilegies root/sudo
     --install, -i                        Install all packages
+    --set-config, -config <user>	 Set config files for User
     --version, -v                        Show version
     --help, -h                           Show this is message
 
@@ -62,15 +63,15 @@ set_configs(){
 	sed -i '/^#greeter-hide-user=/s/#//' /etc/lightdm/lightdm.conf
 #	wget "$_site/$repo/arch_desktop.jpg" -O /usr/share/pixmaps/arch_desktop.jpg 2>/dev/null
 #	wget "$_site/$repo/10-evdev.conf" -O /etc/X11/xorg.conf.d/10-evdev.conf 2>/dev/null
-	cp arch_desktop.jpg /usr/share/pixmaps/ 2>/dev/null
+	mkdir -p /usr/share/pixmaps && cp arch_desktop.jpg /usr/share/pixmaps/arch_desktop.jpg 2>/dev/null
 	cp 10-evdev.conf /etc/X11/xorg.conf.d/ 2>/dev/null
 	echo -e "[greeter]\nbackground=/usr/share/pixmaps/arch_desktop.jpg" > /etc/lightdm/lightdm-gtk-greeter.conf
-	cp i3wm_config /home/${muser}/.config/i3/config 2>/dev/null
+	cp i3wm_config /home/admin/.config/i3/config 2>/dev/null
 }
 
 set_mirror(){
 
-    [[ ! "$(which wget)" ]] && echo "Need install wget." && exit 1
+    [[ ! "$(which git)" ]] && echo "Need install git." && exit 1
 #	wget "$_site/dotfiles/mirror-sk" -O /etc/pacman.d/mirrorlist 2>/dev/null
 	cp mirror-sk /etc/pacman.d/mirrorlist 2>/dev/null
 }
@@ -97,10 +98,8 @@ set_sudouser(){
 set_install(){
 
     pacman -S vim xorg-server xf86-input-mouse xf86-input-keyboard ${video_default} xorg-xinit i3-wm i3status i3lock dmenu awesome-terminal-fonts terminus-font ttf-dejavu ${terminal} lightdm lightdm-gtk-greeter firefox firefox-i18n-en-us bash-completion --noconfirm
-    set_configs
     
 }
-
 
 
 case "$1" in
@@ -108,6 +107,7 @@ case "$1" in
     "--mirror"|"-m") set_mirror ;;
     "--sudouser"|"-su") set_sudouser "$@";;
     "--install"|"-i") set_install;;
+    "--set-config"|"-config") set_configs "$@";;
     "--version"|"-v") echo $version ;;
     "--help"|"-h") usage ;;
     *) echo "Invalid option." && usage ;;
@@ -116,6 +116,6 @@ esac
 
 
 # TODO check VGA card on system and install right package
-
+# TODO check set_mirror function (check if file exist)
 
 exit 0
