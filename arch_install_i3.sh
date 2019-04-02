@@ -34,7 +34,7 @@ usage: ${0##*/} [flags] [options]
     --mirror, -m                         Update mirror (Only for Slovakia)
     --sudouser, -su  <user> <password>   Create name to user with privilegies root/sudo
     --install, -i                        Install all packages
-    --set-config, -config <user>	 Set config files for User
+    --set-config-i3, -i3 <user>	 	 Set config files for User
     --version, -v                        Show version
     --help, -h                           Show this is message
 
@@ -67,10 +67,15 @@ set_configs(){
 	cp 10-evdev.conf /etc/X11/xorg.conf.d/ 2>/dev/null
 	echo -e "[greeter]\nbackground=/usr/share/pixmaps/arch_desktop.jpg" > /etc/lightdm/lightdm-gtk-greeter.conf
 	
+}
+
+set_i3() {
+
 	[[ -z "$2" ]] && echo "Set name user." && exit 1
    	muser=$(echo "$2" | tr -d ' _-' | tr 'A-Z' 'a-z')
     
 	cp i3wm_config /home/${muser}/.config/i3/config 2>/dev/null
+
 }
 
 set_mirror(){
@@ -102,7 +107,7 @@ set_sudouser(){
 set_install(){
 
     pacman -S vim xorg-server xf86-input-mouse xf86-input-keyboard ${video_default} xorg-xinit i3-wm i3status i3lock dmenu awesome-terminal-fonts terminus-font ttf-dejavu ${terminal} lightdm lightdm-gtk-greeter firefox firefox-i18n-en-us bash-completion --noconfirm
-    
+    set_configs
 }
 
 
@@ -111,7 +116,7 @@ case "$1" in
     "--mirror"|"-m") set_mirror ;;
     "--sudouser"|"-su") set_sudouser "$@";;
     "--install"|"-i") set_install;;
-    "--set-config"|"-config") set_configs "$@";;
+    "--set-config-i3"|"-i3") set_i3 "$@";;
     "--version"|"-v") echo $version ;;
     "--help"|"-h") usage ;;
     *) echo "Invalid option." && usage ;;
