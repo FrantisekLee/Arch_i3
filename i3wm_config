@@ -13,14 +13,25 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+#font pango:monospace 8
 
-# border zero
-hide_edge_borders both
+# Setup border for one pixel
+default_border pixel 1
+#default_border normal|none|pixel
+#default_border normal|pixel <px>
+#default_floating_border normal|none|pixel
+#default_floating_border normal|pixel <px>
+
+for_window [class="^.*"] border pixel 2
+gaps inner 10
+gaps outer 10
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
+font pango:DejaVu Sans Mono 8
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -140,6 +151,9 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+# screen locker (first move to "safe" workspace without any chat app)
+# bindsym Control+Mod1+l exec i3-msg workspace 1 && i3lock -c 111111 -d
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -167,10 +181,126 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# workspace screens
+workspace 1 output HDMI1
+workspace 2 output HDMI1
+workspace 3 output HDMI1
+workspace 4 output HDMI1
+workspace 5 output LVDS1
+workspace 6 output LVDS1
+workspace 7 output LVDS1
+workspace 8 output LVDS1
+
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 
-#bar {
-#        status_command i3status
-#}
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
+bar {
+	font pango:Inconsolata 10
+#	position top
+	tray_output on
+#	status_command ~/.config/i3/bumblebee-status/bumblebee-status -m nic memory cpu battery sensors date time pasink pasource brightness indicator layout pacman -t solarized-powerline 
+	status_command ~/.config/i3/bumblebee-status/bumblebee-status -m nic traffic memory cpu sensors battery pasink pasource date time pacman -p cpu.right-click="urxvt -e htop" time.format="%H:%M:%S" date.format="%a, %b %d %Y" date.right-click="gnome-calendar" -t solarized-powerline 
+}
+
+
+# =============================
+# Workspaces specific settings
+# =============================
+
+# -------------------
+# Assign Workspaces
+# ----
+
+# Skype
+assign [class=^Skype$] → $ws9
+
+# Thunderbird Mail client
+assign [class=^Thunderbird$] → $ws10
+
+
+# Firefox & Chromium
+# assign [class="^Firefox$"] → $ws8
+# assign [class="^Chromium$"] → $ws8
+
+
+# Sublime-Text
+# assign [class="^Subl$"] → $ws7
+
+# ----------------------
+# Startup Applications
+# ----
+
+# Firefox
+#exec --no-startup-id i3-msg 'workspace $ws8; exec firefox'
+
+# Sublime-Text Editor
+#exec --no-startup-id i3-msg 'workspace $ws7; exec subl'
+
+# Ranger File Manager
+#exec --no-startup-id i3-msg 'workspace $ws6; exec urxvt -e ranger'
+
+# Skype
+#exec --no-startup-id i3-msg 'workspace $ws9; exec skypeforlinux'
+
+# Thunderbird Client
+exec --no-startup-id i3-msg 'workspace $ws10; exec thunderbird'
+
+# Terminal
+exec --no-startup-id i3-msg 'workspace $ws1; exec urxvt'
+
+
+
+# ==============================
+# Shutdown, Reboot, Lock Screen
+# ==============================
+set $Locker i3lock && sleep 1
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id i3-msg workspace 1 && i3lock -c 111111 -d
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"  
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+p mode "$mode_system"
+
+
+# ==============
+# My binds keys
+# ==============
+# --------------------
+# Ranger File Manager
+# ----
+bindsym $mod+Shift+p exec urxvt -e ranger
+
+# ---------
+# Frirefox
+# ----
+bindsym $mod+Shift+f exec firefox
+
+# -------------
+# Sublime-text
+# ----
+bindsym $mod+Shift+s exec subl
+
+# -------------
+# Pycharm
+# ----
+bindsym $mod+Shift+y exec /opt/pycharm-community-2019.1.1/bin/pycharm.sh 
+
+# -------------
+# Thunderbird
+# ----
+bindsym $mod+Shift+t exec thunderbird
+
 
