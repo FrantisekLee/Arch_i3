@@ -106,7 +106,7 @@ set_sudouser(){
 
 set_install(){
 
-    pacman -S vim xorg-server xf86-input-mouse xf86-input-keyboard ${video_default} xorg-xinit i3-wm i3status i3lock dmenu awesome-terminal-fonts terminus-font ttf-dejavu ${terminal} lightdm lightdm-gtk-greeter firefox firefox-i18n-en-us bash-completion --noconfirm
+    pacman -S vim xorg-server xf86-input-mouse xf86-input-keyboard ${video_default} xorg-xinit i3-gaps i3status i3lock dmenu awesome-terminal-fonts terminus-font ttf-dejavu ${terminal} lightdm lightdm-gtk-greeter firefox firefox-i18n-en-us bash-completion --noconfirm
     set_configs
 }
 
